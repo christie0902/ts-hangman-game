@@ -5,12 +5,23 @@ const KEYS = [
     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
   ];
 
-export function Keyboard() {
+type  KeyboardProps = {
+    disabled?: boolean
+    activeLetters : string[], inactiveLetters: string[], addGuessedLetter: (letter:string)=>void
+}
+
+export function Keyboard({activeLetters, inactiveLetters, addGuessedLetter, disabled=false} : KeyboardProps) {
     return <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(75px, 1fr))", gap:".5rem"}}>
         {KEYS.map(key=> {
+             const isActive = activeLetters.includes(key);
+             const isInactive = inactiveLetters.includes(key);
+      
             return (
                 <button key={key}
-                className={styles.btn}
+                className={`${styles.btn} ${isActive ? styles.active : ''} ${isInactive ? styles.inactive : ''}`}
+                disabled={isActive || isInactive || disabled}
+                onClick={()=>addGuessedLetter(key)}
+            
                 >{key}</button>
             )
         })}
